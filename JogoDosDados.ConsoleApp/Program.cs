@@ -6,6 +6,9 @@ internal class Program
     {
         const int limiteLinhaChegada = 30;
 
+        int[] casasAvanco = [5, 10, 15, 25];
+        int[] casasRecuo = [7, 13, 20];
+
         while (true)
         {
             int posicaoJogador = 0;
@@ -29,6 +32,23 @@ internal class Program
                 Console.WriteLine($"\nO valor sorteado foi {resultado}!\n");
 
                 posicaoJogador += resultado;
+
+                if (casasAvanco.Contains(posicaoJogador))
+                {
+                    posicaoJogador += 3;
+                    Console.WriteLine("------------------------------------------------");
+                    Console.WriteLine("EVENTO ESPECIAL: Avanço extra de 3 casas!");
+                    Console.WriteLine($"Você avançou para a posição : {posicaoJogador}");
+                    Console.WriteLine("------------------------------------------------\n");
+                }
+                else if (casasRecuo.Contains(posicaoJogador))
+                {
+                    posicaoJogador -= 2;
+                    Console.WriteLine("------------------------------------------------");
+                    Console.WriteLine("EVENTO ESPECIAL: Recuo de 2 casas!");
+                    Console.WriteLine($"Você Recuou para a posição : {posicaoJogador}");
+                    Console.WriteLine("------------------------------------------------\n");
+                }
 
                 if (posicaoJogador >= limiteLinhaChegada)
                 {
