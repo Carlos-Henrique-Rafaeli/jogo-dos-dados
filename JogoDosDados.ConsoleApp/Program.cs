@@ -18,77 +18,87 @@ internal class Program
 
     static void IniciarJogo()
     {
-        bool jogoEmAndamento = true;
-
-        while (jogoEmAndamento)
+        JogoDosDados.Resetar();
+        while (true)
         {
-            string quemEstaJogando = "Usuário";
-
-            ExibirCabecalho(quemEstaJogando);
-
-            string resultado = JogoDosDados.JogarRodada(quemEstaJogando);
-
-            ExibirValorSorteado();
-
-            if (resultado == "Jogador Avanço")
-                EventoAvancar(quemEstaJogando);
-
-            else if (resultado == "Jogador Recuo")
-                EventoRecuo(quemEstaJogando);
-
-            ExibirPosicao();
-
-            if (resultado == "Jogador Venceu")
+            string quemEstaJogando;
+            string resultado;
+            
+            while (JogoDosDados.quantidadeRodadasJogador > 0)
             {
-                EventoGanhar(quemEstaJogando);
-                jogoEmAndamento = false;
-                continue;
+                quemEstaJogando = "Usuário";
+
+                ExibirCabecalho(quemEstaJogando);
+
+                resultado = JogoDosDados.JogarRodada(quemEstaJogando);
+
+                ExibirValorSorteado(quemEstaJogando);
+
+                if (resultado == "Jogador Avanço")
+                    EventoAvancar(quemEstaJogando);
+
+                else if (resultado == "Jogador Recuo")
+                    EventoRecuo(quemEstaJogando);
+
+                ExibirPosicao();
+
+                if (resultado == "Jogador Venceu")
+                {
+                    EventoGanhar(quemEstaJogando);
+                    return;
+                }
+
+                JogoDosDados.quantidadeRodadasComputador = 1;
+                IrParaProximaRodada();
             }
-
-            IrParaProximaRodada();
-
-            quemEstaJogando = "Computador";
-
-            ExibirCabecalho(quemEstaJogando);
-
-            resultado = JogoDosDados.JogarRodada(quemEstaJogando);
-
-            ExibirValorSorteado();
-
-            if (resultado == "Computador Avanço")
-                EventoAvancar(quemEstaJogando);
-
-            else if (resultado == "Computador Recuo")
-                EventoRecuo(quemEstaJogando);
-
-            ExibirPosicao();
-
-            if (resultado == "Computador Venceu")
+            
+            while (JogoDosDados.quantidadeRodadasComputador > 0)
             {
-                EventoGanhar(quemEstaJogando);
-                jogoEmAndamento = false;
-                continue;
-            }
+                quemEstaJogando = "Computador";
 
-            IrParaProximaRodada();
+                ExibirCabecalho(quemEstaJogando);
+
+                resultado = JogoDosDados.JogarRodada(quemEstaJogando);
+
+                ExibirValorSorteado(quemEstaJogando);
+
+                if (resultado == "Computador Avanço")
+                    EventoAvancar(quemEstaJogando);
+
+                else if (resultado == "Computador Recuo")
+                    EventoRecuo(quemEstaJogando);
+
+                ExibirPosicao();
+
+                if (resultado == "Computador Venceu")
+                {
+                    EventoGanhar(quemEstaJogando);
+                    return;
+                }
+
+                JogoDosDados.quantidadeRodadasJogador = 1;
+                IrParaProximaRodada();
+            }
         }
     }
 
     static void EventoAvancar(string quemAvancou)
     {
+        Console.WriteLine();
+
         if (quemAvancou == "Usuário")
         {
             Console.WriteLine("------------------------------------------------");
             Console.WriteLine("EVENTO ESPECIAL: Avanço extra de 3 casas!");
             Console.WriteLine($"Você avançou para a posição : {JogoDosDados.posicaoJogador}");
-            Console.WriteLine("------------------------------------------------\n");
+            Console.WriteLine("------------------------------------------------");
         }
         else
         {
             Console.WriteLine("------------------------------------------------");
             Console.WriteLine("EVENTO ESPECIAL: Avanço extra de 3 casas!");
             Console.WriteLine($"O Computador avançou para a posição : {JogoDosDados.posicaoComputador}");
-            Console.WriteLine("------------------------------------------------\n");
+            Console.WriteLine("------------------------------------------------");
         }
     }
 
@@ -112,19 +122,40 @@ internal class Program
 
     static void EventoRecuo(string quemRecuou)
     {
+        Console.WriteLine();
+
         if (quemRecuou == "Usuário")
         {
             Console.WriteLine("------------------------------------------------");
             Console.WriteLine("EVENTO ESPECIAL: Recuo de 2 casas!");
             Console.WriteLine($"Você recuou para a posição : {JogoDosDados.posicaoJogador}");
-            Console.WriteLine("------------------------------------------------\n");
+            Console.WriteLine("------------------------------------------------");
         }
         else
         {
             Console.WriteLine("------------------------------------------------");
             Console.WriteLine("EVENTO ESPECIAL: Recuo de 2 casas!");
             Console.WriteLine($"O Computador recuou para a posição : {JogoDosDados.posicaoComputador}");
-            Console.WriteLine("------------------------------------------------\n");
+            Console.WriteLine("------------------------------------------------");
+        }
+    }
+    static void EventoBonus(string quemRecebeuBonus)
+    {
+        Console.WriteLine();
+
+        if (quemRecebeuBonus == "Usuário")
+        {
+            Console.WriteLine("------------------------------------------------");
+            Console.WriteLine("EVENTO ESPECIAL: Rodada Bônus");
+            Console.WriteLine($"Você joga mais uma vez!");
+            Console.WriteLine("------------------------------------------------");
+        }
+        else
+        {
+            Console.WriteLine("------------------------------------------------");
+            Console.WriteLine("EVENTO ESPECIAL: Rodada Bônus");
+            Console.WriteLine($"O Computador joga mais uma vez!");
+            Console.WriteLine("------------------------------------------------");
         }
     }
 
@@ -134,13 +165,18 @@ internal class Program
         Console.ReadLine();
     }
 
-    static void ExibirValorSorteado()
+    static void ExibirValorSorteado(string quemEstaJogando)
     {
-        Console.WriteLine($"\nO valor sorteado foi: {JogoDosDados.resultado}\n");
+        Console.WriteLine($"\nO valor sorteado foi: {JogoDosDados.resultado}");
+
+        if (JogoDosDados.resultado == 6)
+            EventoBonus(quemEstaJogando);
     }
 
     static void ExibirPosicao()
     {
+        Console.WriteLine();
+
         Console.WriteLine($"Você está na posição {JogoDosDados.posicaoJogador} de {JogoDosDados.limiteLinhaChegada}");
         Console.WriteLine($"O Computador está na posição {JogoDosDados.posicaoComputador} de {JogoDosDados.limiteLinhaChegada}");
     }

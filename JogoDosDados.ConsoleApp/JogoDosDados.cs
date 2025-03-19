@@ -12,6 +12,8 @@ public class JogoDosDados
 
     public const int limiteLinhaChegada = 30;
 
+    public static int quantidadeRodadasJogador = 1;
+    public static int quantidadeRodadasComputador = 1;
 
     public static string JogarRodada(string quemVaiJogar)
     {
@@ -21,15 +23,18 @@ public class JogoDosDados
         {
             posicaoJogador += resultado;
 
+            quantidadeRodadasJogador--;
+
+            if (resultado == 6)
+                quantidadeRodadasJogador++;
+
             if (casasAvanco.Contains(posicaoJogador))
             {
                 posicaoJogador += 3;
 
                 if (posicaoJogador >= limiteLinhaChegada)
-                {
-                    posicaoJogador = 30;
                     return "Jogador Venceu";
-                }
+                
                 else
                     return "Jogador Avanço";
             }
@@ -40,23 +45,25 @@ public class JogoDosDados
             }
 
             if (posicaoJogador >= limiteLinhaChegada)
-            {
                 return "Jogador Venceu";
-            }
         }
         
         else
         {
             posicaoComputador += resultado;
 
+            quantidadeRodadasComputador--;
+
+            if (resultado == 6)
+                quantidadeRodadasComputador++;
+
             if (casasAvanco.Contains(posicaoComputador))
             {
                 posicaoComputador += 3;
 
                 if (posicaoComputador >= limiteLinhaChegada)
-                {
                     return "Computador Venceu";
-                }
+                
                 else
                     return "Computador Avanço";
             }
@@ -67,10 +74,7 @@ public class JogoDosDados
             }
 
             if (posicaoComputador >= limiteLinhaChegada)
-            {
-                posicaoComputador = 30;
                 return "Computador Venceu";
-            }
         }
 
         return "";
@@ -83,5 +87,14 @@ public class JogoDosDados
         resultado = geradorDeNumeros.Next(1, 7);
 
         return resultado;
+    }
+
+    public static void Resetar()
+    {
+        posicaoJogador = 0;
+        posicaoComputador = 0;
+        resultado = 0;
+        quantidadeRodadasJogador = 1;
+        quantidadeRodadasComputador = 1;
     }
 }
